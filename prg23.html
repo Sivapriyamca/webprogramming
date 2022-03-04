@@ -1,0 +1,145 @@
+Sample_conn.php
+<html>
+   <head>
+      <title>Connecting MySQL Server</title>
+   </head>
+   <body>
+      <?php
+         $dbhost = 'localhost';
+         $dbuser = '21mca041';
+         $dbpass = '2655';
+         $mysqli = new mysqli($dbhost, $dbuser, $dbpass);
+         
+         if($mysqli->connect_errno ) {
+            printf("Connect failed: %s<br />", $mysqli->connect_error);
+            exit();
+         }
+         printf('Connected successfully.<br />');
+         $mysqli->close();
+      ?>
+   </body>
+</html>
+Create database.php
+<html>
+   <head><title>Creating MySQL Database</title></head>
+   <body>
+      <?php
+         $dbhost = 'localhost';
+         $dbuser = '21mca041';
+         $dbpass = '2655';
+         $mysqli = new mysqli($dbhost, $dbuser, $dbpass);
+         
+         if($mysqli->connect_errno ) {
+            printf("Connect failed: %s<br />", $mysqli->connect_error);
+            exit();
+         }
+         printf('Connected successfully.<br />');
+		 
+         if ($mysqli->query("CREATE DATABASE sample")) {
+            printf("Database TUTORIALS created successfully.<br />");
+         }
+         if ($mysqli->errno) {
+            printf("Could not create database: %s<br />", $mysqli->error);
+         }
+         $mysqli->close();
+      ?>
+   </body>
+</html>
+Create table_book.php
+<html>
+   <head>
+      <title>Creating MySQL Table</title>
+   </head>
+   <body>
+      <?php
+         $dbhost = 'localhost';
+         $dbuser = '21mca041';
+         $dbpass = '2655';
+         $dbname = '21mca041';
+         $mysqli = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+         
+         if($mysqli->connect_errno ) {
+            printf("Connect failed: %s<br />", $mysqli->connect_error);
+            exit();
+         }
+         printf('Connected successfully.<br />');
+         $sql = "CREATE TABLE book_tb( ".
+            "book_id INT NOT NULL AUTO_INCREMENT, ".
+            "book_title VARCHAR(100) NOT NULL, ".
+            "book_author VARCHAR(40) NOT NULL, ".
+            "purchase_date DATE, ".
+            "PRIMARY KEY ( book_id )); ";
+         if ($mysqli->query($sql)) {
+            printf("Table book_tb created successfully.<br />");
+         }
+         if ($mysqli->errno) {
+            printf("Could not create table: %s<br />", $mysqli->error);
+         }
+         $mysqli->close();
+      ?>
+   </body>
+</html>
+Insert_book.php
+<!DOCTYPE HTML>
+<html>
+<body bgcolor="87ceeb">
+    <center><h2>Simple Library Management System</h2></center>
+    <br>
+ 
+    <?php
+        include("DBConnection.php");
+ 
+        $isbn=$_POST["isbn"];
+        $title=$_POST["title"];
+        $author=$_POST["author"];
+        $edition=$_POST["edition"];
+        $publication=$_POST["publication"];
+ 
+        $query = "insert into book_info(isbn,title,author,edition,publication) values('$isbn','$title','$author','$edition','$publication')"; 
+        $result = mysqli_query($db,$query);
+    ?>
+    <h3> Book information is inserted successfully </h3>
+ 
+    <a href="SearchBooks.php"> To search for the Book information click here </a>
+ 
+</body>
+</html>
+Selecting_record.php
+<html>
+<head>
+<style>
+table, th, td {
+    border: 1px solid black;
+}
+</style>
+</head>
+<body>
+<?php
+$servername = "localhost";
+$username = "21mca041";
+$password = "2655";
+$dbname = "21mca041";
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+$sql = "SELECT * FROM book_tb";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    echo "<table><tr><th>Book_ID</th><th>Book_Title</th><th>Book_Author</th><th>Purchase_Date</th></tr>";
+    
+    while($row = $result->fetch_assoc()) {
+        echo "<tr><td>" . $row["book_id"]. "</td>"."<td>" . $row["book_title"]. " </td>" ."<td>" . $row["book_author"]."<td>" . $row["purchase_date"]. " </td></tr>";  }
+    echo "</table>";
+} else {
+    echo "0 results";
+}
+
+$conn->close();
+?>
+</body>
+</html>
+
